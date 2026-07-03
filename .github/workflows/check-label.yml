@@ -1,0 +1,49 @@
+name: Verify PR
+
+on:
+  workflow_call:
+  pull_request:
+    types: [opened, synchronize, labeled, unlabeled]
+
+jobs:
+  avoid_reduncy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Cancel Previous Redundant Builds
+        uses: styfle/cancel-workflow-action@0.9.1
+
+  check_label:
+    name: check for patch, minor or major label
+    if: |
+      (contains(github.event.pull_request.labels.*.name, 'major') ||
+      contains(github.event.pull_request.labels.*.name, 'minor') || 
+      contains(github.event.pull_request.labels.*.name, 'patch'))
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Install gh CLI
+        run: sudo apt-get install -y gh
+
+      - name: Authenticate with GitHub CLI
+        run: echo "${{ secrets.GITHUB_TOKEN }}" | gh auth login --with-token
+
+      - name: Get and Echo PR Labels
+        run: |
+          PR_NUMBER=$(jq -r '.pull_request.number' < "${GITHUB_EVENT_PATH}")
+          LABELS=$(gh pr view $PR_NUMBER --json labels --jq '.labels | map(.name) | join(", ")')
+          echo "Labels: $LABELS"
+
+  check_label_not_present:
+    name: label major, minor or patch not present
+    if: |
+      ! (contains(github.event.pull_request.labels.*.name, 'major') || 
+      contains(github.event.pull_request.labels.*.name, 'minor') || 
+      contains(github.event.pull_request.labels.*.name, 'patch'))
+    runs-on: ubuntu-latest
+    steps:
+      - name: Missing label
+        run: |
+          echo "Missing label 'major', 'minor' or 'patch in Pull Request"
+          exit 1

@@ -1,0 +1,135 @@
+name: Update Changelog on PR Merge for Develop
+
+on:
+  pull_request:
+    branches:
+      - develop
+    types: [closed]
+
+jobs:
+  avoid_reduncy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Cancel Previous Redundant Builds
+        uses: styfle/cancel-workflow-action@0.9.1
+
+  check_label:
+    uses: ./.github/workflows/check-label.yml
+    secrets: inherit
+
+  bump_version:
+    name: Create and push tag
+    needs: [check_label]
+    if: github.event.pull_request.merged == true
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: "22"
+
+      - name: Extract original version
+        run: |
+          original_version=$(node -p "require('./package.json').version")
+          echo "Original version: $original_version"
+          echo "original_version=$original_version" >> "$GITHUB_ENV"
+
+      - name: Check "user details"
+        run: |
+          git config user.email $GITHUB_ACTOR@users.noreply.github.com
+          git config user.name "$GITHUB_ACTOR"
+
+      - name: Create "major version"
+        if: contains(github.event.pull_request.labels.*.name, 'major')
+        run: |
+          npm version major --no-git-tag-version
+          git commit -a -m 'version bump major'
+
+      - name: Create "minor version"
+        if: contains(github.event.pull_request.labels.*.name, 'minor')
+        run: |
+          npm version minor --no-git-tag-version
+          git commit -a -m 'version bump minor'
+
+      - name: Create "patch version"
+        if: contains(github.event.pull_request.labels.*.name, 'patch')
+        run: |
+          npm version patch --no-git-tag-version 
+          git commit -a -m 'version bump patch'
+
+      - name: ⤴ Update Version tag
+        id: update-version-tag
+        run: |
+          echo "$(pwd)"
+          git status
+          VERSION=$(node -p "require('./package.json').version") 
+          echo "VERSION=$(node -p "require('./package.json').version")" >> $GITHUB_ENV
+          git tag -a v${VERSION} -m 'Release tag ${VERSION}'
+          git push -f origin --follow-tags --atomic
+          echo "LATEST_TAG=v${VERSION}" >> $GITHUB_ENV
+          echo "$(git branch)"
+
+  update-changelog:
+    name: Update Changelog
+    needs: [bump_version, check_label]
+    if: github.event.pull_request.merged == true
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Install gh CLI
+        run: sudo apt-get install -y gh
+
+      - name: Authenticate with GitHub CLI
+        run: echo "${{ secrets.GITHUB_TOKEN }}" | gh auth login --with-token
+
+      - name: Pull main changes
+        run: git pull origin develop
+
+      - name: Get Pull Request Details
+        id: pr-details
+        run: |
+          new_pr_number=$(jq -r '.pull_request.number' < "${GITHUB_EVENT_PATH}")
+          pr_title=$(gh pr view $new_pr_number --json title --jq .title)
+          pr_current_url=$(gh pr view $new_pr_number --json url --jq .url)
+          echo "PR Number: $new_pr_number"
+          echo "PR Title: $pr_title"
+          echo "PR URL: $pr_current_url"
+          echo "new_pr_number=$new_pr_number" >> "$GITHUB_ENV"
+          echo "pr_title=$pr_title" >> "$GITHUB_ENV"
+          echo "pr_current_url=$pr_current_url" >> "$GITHUB_ENV"
+
+      - name: Get Version from package.json
+        id: get-version
+        run: |
+          new_version=$(jq -r '.version' < package.json)
+          echo "New Version: $new_version"
+          echo "new_version=$new_version" >> "$GITHUB_ENV"
+
+      - name: Get info changelog
+        run: |
+          new_date=$(date +%Y-%m-%d)
+          new_content="## v${new_version} (${new_date})\n\n### Pull Requests\n[#$new_pr_number]($pr_current_url) | ${pr_title}\n\n"
+          echo "New Content: $new_content"
+          echo "new_content=$new_content" >> "$GITHUB_ENV"
+
+      - name: Update CHANGELOG.md
+        run: |
+          echo "Nuevo contenido: $new_content"
+          echo -e "${new_content}\n$(cat CHANGELOG.md)" > CHANGELOG.md
+
+      - name: Check user details
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+
+      - uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: Update CHANGELOG.md
+          branch: develop
