@@ -1,6 +1,6 @@
 {
   "name": "cms-controllet",
-  "version": "0.1.0",
+  "version": "0.3.1",
   "private": true,
   "description": "A Strapi application",
   "scripts": {
@@ -11,11 +11,14 @@
     "develop": "strapi develop",
     "start": "strapi start",
     "strapi": "strapi",
+    "seed": "node scripts/seed-requisicion-equipo.js",
+    "seed:force": "node scripts/seed-requisicion-equipo.js --force",
     "upgrade": "npx @strapi/upgrade latest",
     "upgrade:dry": "npx @strapi/upgrade latest --dry"
   },
   "dependencies": {
     "@strapi/plugin-cloud": "5.50.0",
+    "@strapi/plugin-graphql": "^5.50.0",
     "@strapi/plugin-users-permissions": "5.50.0",
     "@strapi/strapi": "5.50.0",
     "better-sqlite3": "12.8.0",
