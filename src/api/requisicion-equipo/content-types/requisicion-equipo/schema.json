@@ -27,11 +27,11 @@
         "En resguardo"
       ]
     },
-    "descripcion": {
+    "descripcion_danio": {
       "type": "string"
     },
     "fecha_ultima_revision": {
-      "type": "datetime"
+      "type": "date"
     },
     "actividad": {
       "type": "enumeration",

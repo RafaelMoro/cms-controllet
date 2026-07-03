@@ -459,7 +459,7 @@ export interface ApiRequisicionEquipoRequisicionEquipo
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
-    descripcion: Schema.Attribute.String;
+    descripcion_danio: Schema.Attribute.String;
     descripcion_status: Schema.Attribute.Enumeration<
       [
         'Buen estado',
@@ -473,7 +473,7 @@ export interface ApiRequisicionEquipoRequisicionEquipo
       Schema.Attribute.Required;
     evidencia_fotografica_src: Schema.Attribute.String &
       Schema.Attribute.Required;
-    fecha_ultima_revision: Schema.Attribute.DateTime;
+    fecha_ultima_revision: Schema.Attribute.Date;
     locale: Schema.Attribute.String & Schema.Attribute.Private;
     localizations: Schema.Attribute.Relation<
       'oneToMany',
