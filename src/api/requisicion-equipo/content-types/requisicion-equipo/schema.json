@@ -1,0 +1,31 @@
+{
+  "kind": "collectionType",
+  "collectionName": "requisicion_equipos",
+  "info": {
+    "singularName": "requisicion-equipo",
+    "pluralName": "requisicion-equipos",
+    "displayName": "Requisicion Equipo"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "ubicacion": {
+      "type": "string",
+      "required": true
+    },
+    "descripcion_status": {
+      "type": "enumeration",
+      "required": true,
+      "enum": [
+        "Buen estado",
+        "Requiere cambio",
+        "Requiere reparación",
+        "Bloqueada",
+        "Extraviada",
+        "En resguardo"
+      ]
+    }
+  }
+}

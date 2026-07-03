@@ -441,6 +441,46 @@ export interface AdminUser extends Struct.CollectionTypeSchema {
   };
 }
 
+export interface ApiRequisicionEquipoRequisicionEquipo
+  extends Struct.CollectionTypeSchema {
+  collectionName: 'requisicion_equipos';
+  info: {
+    displayName: 'Requisicion Equipo';
+    pluralName: 'requisicion-equipos';
+    singularName: 'requisicion-equipo';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    descripcion_status: Schema.Attribute.Enumeration<
+      [
+        'Buen estado',
+        'Requiere cambio',
+        'Requiere reparaci\u00F3n',
+        'Bloqueada',
+        'Extraviada',
+        'En resguardo',
+      ]
+    > &
+      Schema.Attribute.Required;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::requisicion-equipo.requisicion-equipo'
+    > &
+      Schema.Attribute.Private;
+    publishedAt: Schema.Attribute.DateTime;
+    ubicacion: Schema.Attribute.String & Schema.Attribute.Required;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
 export interface PluginContentReleasesRelease
   extends Struct.CollectionTypeSchema {
   collectionName: 'strapi_releases';
@@ -952,6 +992,7 @@ declare module '@strapi/strapi' {
       'admin::transfer-token': AdminTransferToken;
       'admin::transfer-token-permission': AdminTransferTokenPermission;
       'admin::user': AdminUser;
+      'api::requisicion-equipo.requisicion-equipo': ApiRequisicionEquipoRequisicionEquipo;
       'plugin::content-releases.release': PluginContentReleasesRelease;
       'plugin::content-releases.release-action': PluginContentReleasesReleaseAction;
       'plugin::i18n.locale': PluginI18NLocale;
