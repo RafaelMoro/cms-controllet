@@ -453,9 +453,13 @@ export interface ApiRequisicionEquipoRequisicionEquipo
     draftAndPublish: true;
   };
   attributes: {
+    actividad: Schema.Attribute.Enumeration<
+      ['Sin Actividad', 'Roedor', 'Insecto Rastrero', 'Reptil']
+    >;
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
+    descripcion: Schema.Attribute.String;
     descripcion_status: Schema.Attribute.Enumeration<
       [
         'Buen estado',
@@ -467,6 +471,7 @@ export interface ApiRequisicionEquipoRequisicionEquipo
       ]
     > &
       Schema.Attribute.Required;
+    fecha_ultima_revision: Schema.Attribute.DateTime;
     locale: Schema.Attribute.String & Schema.Attribute.Private;
     localizations: Schema.Attribute.Relation<
       'oneToMany',

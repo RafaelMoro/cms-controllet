@@ -26,6 +26,21 @@
         "Extraviada",
         "En resguardo"
       ]
+    },
+    "descripcion": {
+      "type": "string"
+    },
+    "fecha_ultima_revision": {
+      "type": "datetime"
+    },
+    "actividad": {
+      "type": "enumeration",
+      "enum": [
+        "Sin Actividad",
+        "Roedor",
+        "Insecto Rastrero",
+        "Reptil"
+      ]
     }
   }
 }
