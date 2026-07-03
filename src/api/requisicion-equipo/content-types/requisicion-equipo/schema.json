@@ -24,7 +24,8 @@
         "Requiere reparación",
         "Bloqueada",
         "Extraviada",
-        "En resguardo"
+        "En resguardo",
+        "Desenergizada"
       ]
     },
     "descripcion_danio": {
@@ -39,7 +40,9 @@
         "Sin Actividad",
         "Roedor",
         "Insecto Rastrero",
-        "Reptil"
+        "Reptil",
+        "Actividad moderada",
+        "Actividad baja"
       ]
     },
     "evidencia_fotografica_src": {

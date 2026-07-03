@@ -454,7 +454,14 @@ export interface ApiRequisicionEquipoRequisicionEquipo
   };
   attributes: {
     actividad: Schema.Attribute.Enumeration<
-      ['Sin Actividad', 'Roedor', 'Insecto Rastrero', 'Reptil']
+      [
+        'Sin Actividad',
+        'Roedor',
+        'Insecto Rastrero',
+        'Reptil',
+        'Actividad moderada',
+        'Actividad baja',
+      ]
     >;
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
@@ -468,6 +475,7 @@ export interface ApiRequisicionEquipoRequisicionEquipo
         'Bloqueada',
         'Extraviada',
         'En resguardo',
+        'Desenergizada',
       ]
     > &
       Schema.Attribute.Required;
