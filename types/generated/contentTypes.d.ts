@@ -482,6 +482,7 @@ export interface ApiRequisicionEquipoRequisicionEquipo
       Schema.Attribute.Required;
     evidencia_fotografica_src: Schema.Attribute.String;
     fecha_ultima_revision: Schema.Attribute.Date;
+    internal_id: Schema.Attribute.String & Schema.Attribute.Required;
     locale: Schema.Attribute.String & Schema.Attribute.Private;
     localizations: Schema.Attribute.Relation<
       'oneToMany',

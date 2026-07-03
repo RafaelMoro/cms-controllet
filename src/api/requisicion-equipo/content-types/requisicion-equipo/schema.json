@@ -52,6 +52,10 @@
     "category": {
       "type": "string",
       "required": true
+    },
+    "internal_id": {
+      "type": "string",
+      "required": true
     }
   }
 }
