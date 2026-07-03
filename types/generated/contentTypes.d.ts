@@ -471,6 +471,8 @@ export interface ApiRequisicionEquipoRequisicionEquipo
       ]
     > &
       Schema.Attribute.Required;
+    evidencia_fotografica_src: Schema.Attribute.String &
+      Schema.Attribute.Required;
     fecha_ultima_revision: Schema.Attribute.DateTime;
     locale: Schema.Attribute.String & Schema.Attribute.Private;
     localizations: Schema.Attribute.Relation<

@@ -41,6 +41,10 @@
         "Insecto Rastrero",
         "Reptil"
       ]
+    },
+    "evidencia_fotografica_src": {
+      "type": "string",
+      "required": true
     }
   }
 }
