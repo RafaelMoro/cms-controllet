@@ -82,6 +82,7 @@ function normalizeRecord(record) {
     fecha_ultima_revision,
     actividad,
     category,
+    evidencia_fotografica_src,
   } = record;
 
   if (!ubicacion || !internal_id) {
@@ -99,7 +100,7 @@ function normalizeRecord(record) {
     return null;
   }
 
-  return {
+  const normalized = {
     internal_id,
     ubicacion,
     descripcion_status,
@@ -109,6 +110,12 @@ function normalizeRecord(record) {
     actividad: actividad && actividad !== 'N/A' ? actividad : null,
     category,
   };
+
+  if (evidencia_fotografica_src) {
+    normalized.evidencia_fotografica_src = evidencia_fotografica_src;
+  }
+
+  return normalized;
 }
 
 // ---------------------------------------------------------------------------
