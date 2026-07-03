@@ -48,6 +48,10 @@
     "evidencia_fotografica_src": {
       "type": "string",
       "required": false
+    },
+    "category": {
+      "type": "string",
+      "required": true
     }
   }
 }
