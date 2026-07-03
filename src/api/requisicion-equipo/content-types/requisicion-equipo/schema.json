@@ -1,0 +1,61 @@
+{
+  "kind": "collectionType",
+  "collectionName": "requisicion_equipos",
+  "info": {
+    "singularName": "requisicion-equipo",
+    "pluralName": "requisicion-equipos",
+    "displayName": "Requisicion Equipo"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "ubicacion": {
+      "type": "string",
+      "required": true
+    },
+    "descripcion_status": {
+      "type": "enumeration",
+      "required": true,
+      "enum": [
+        "Buen estado",
+        "Requiere cambio",
+        "Requiere reparación",
+        "Bloqueada",
+        "Extraviada",
+        "En resguardo",
+        "Desenergizada"
+      ]
+    },
+    "descripcion_danio": {
+      "type": "string"
+    },
+    "fecha_ultima_revision": {
+      "type": "date"
+    },
+    "actividad": {
+      "type": "enumeration",
+      "enum": [
+        "Sin Actividad",
+        "Roedor",
+        "Insecto Rastrero",
+        "Reptil",
+        "Actividad moderada",
+        "Actividad baja"
+      ]
+    },
+    "evidencia_fotografica_src": {
+      "type": "string",
+      "required": false
+    },
+    "category": {
+      "type": "string",
+      "required": true
+    },
+    "internal_id": {
+      "type": "string",
+      "required": true
+    }
+  }
+}
